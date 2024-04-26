@@ -3,95 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2048 Game</title>
+<title>Calculator</title>
 <style>
-  /* CSS styles for the game */
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  .game-board {
-    border: 2px solid #333;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+  /* CSS styles for the calculator */
+  .calculator {
+    max-width: 300px;
+    margin: 50px auto;
+    border: 2px solid #ccc;
     padding: 10px;
-    max-width: 400px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
   }
-  .tile {
-    border: 2px solid #333;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    background-color: #eee;
-    transition: background-color 0.3s ease;
+  input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 18px;
+  }
+  input[type="button"] {
+    width: 48%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 5px;
   }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="game-board" id="gameBoard"></div>
+<div class="calculator">
+  <form name="calcForm">
+    <input type="text" name="display" id="display" readonly>
+    <input type="button" value="7" onclick="addToDisplay('7')">
+    <input type="button" value="8" onclick="addToDisplay('8')">
+    <input type="button" value="9" onclick="addToDisplay('9')">
+    <input type="button" value="/" onclick="addToDisplay('/')">
+    <input type="button" value="4" onclick="addToDisplay('4')">
+    <input type="button" value="5" onclick="addToDisplay('5')">
+    <input type="button" value="6" onclick="addToDisplay('6')">
+    <input type="button" value="*" onclick="addToDisplay('*')">
+    <input type="button" value="1" onclick="addToDisplay('1')">
+    <input type="button" value="2" onclick="addToDisplay('2')">
+    <input type="button" value="3" onclick="addToDisplay('3')">
+    <input type="button" value="-" onclick="addToDisplay('-')">
+    <input type="button" value="0" onclick="addToDisplay('0')">
+    <input type="button" value="." onclick="addToDisplay('.')">
+    <input type="button" value="=" onclick="calculate()">
+    <input type="button" value="+" onclick="addToDisplay('+')">
+    <input type="button" value="C" onclick="clearDisplay()">
+  </form>
 </div>
 <script>
-  // JavaScript for the game logic
-  const gameBoard = document.getElementById('gameBoard');
-  let board = Array(16).fill(0);
-
-  // Function to initialize the game board
-  function initBoard() {
-    board = Array(16).fill(0);
-    addTile();
-    addTile();
-    renderBoard();
+  function addToDisplay(value) {
+    document.calcForm.display.value += value;
   }
 
-  // Function to add a new tile to a random empty cell
-  function addTile() {
-    const emptyCells = board.reduce((acc, cell, index) => {
-      if (cell === 0) acc.push(index);
-      return acc;
-    }, []);
-
-    if (emptyCells.length > 0) {
-      const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-      board[randomIndex] = Math.random() < 0.9 ? 2 : 4;
+  function calculate() {
+    try {
+      document.calcForm.display.value = eval(document.calcForm.display.value);
+    } catch (error) {
+      document.calcForm.display.value = 'Error';
     }
   }
 
-  // Function to render the game board
-  function renderBoard() {
-    gameBoard.innerHTML = '';
-    board.forEach((cell, index) => {
-      const tile = document.createElement('div');
-      tile.className = 'tile';
-      tile.textContent = cell !== 0 ? cell : '';
-      tile.style.backgroundColor = getTileColor(cell);
-      gameBoard.appendChild(tile);
-    });
+  function clearDisplay() {
+    document.calcForm.display.value = '';
   }
-
-  // Function to get the background color for each tile
-  function getTileColor(value) {
-    switch (value) {
-      case 2: return '#eee4da';
-      case 4: return '#ede0c8';
-      case 8: return '#f2b179';
-      case 16: return '#f59563';
-      case 32: return '#f67c5f';
-      case 64: return '#f65e3b';
-      case 128: return '#edcf72';
-      case 256: return '#edcc61';
-      case 512: return '#edc850';
-      case 1024: return '#edc53f';
-      case 2048: return '#edc22e';
-      default: return '#ccc0b3';
-    }
-  }
-
-  // Initialize the game board
-  initBoard();
 </script>
 </body>
 </html>
